@@ -6,29 +6,29 @@ class Bot:
     def __init__(self):
         self.id = id+1
         id += 1
+
+
+
+    def load_driver(self, url:str = None, headless: bool = False):
+        """loads driver and opens url, default to cms url if not provided
         
-
-
-def load_driver(self, url:str = None, headless: bool = False):
-    """loads driver and opens url, default to cms url if not provided
-    
-    Keyword Arguments:
-        url {str} -- url to be loaded (default: {None})
-        headless {bool} -- set to True if you want to run in headless mode (default: {False})
-    """
-    options = webdriver.ChromeOptions()
-    if self.headless:
-        options.add_argument("headless")
-    options.add_argument("--window-size=1920,1080")
-    options.add_argument("--log-level=3")
-    options.add_argument("--silent")
-    driver = webdriver.Chrome(
-        executable_path=r"C:\Users\knaben\AppData\Local\chromedriver.exe",
-        options=options,
-        )
-    if not url:
-        url: str = "https://cms.obos.no/EPiServer/Cms/#context=epi.cms.contentdata:///5&viewsetting=viewlanguage:///no" 
-    driver.get(url)
+        Keyword Arguments:
+            url {str} -- url to be loaded (default: {None})
+            headless {bool} -- set to True if you want to run in headless mode (default: {False})
+        """
+        options = webdriver.ChromeOptions()
+        if self.headless:
+            options.add_argument("headless")
+        options.add_argument("--window-size=1920,1080")
+        options.add_argument("--log-level=3")
+        options.add_argument("--silent")
+        driver = webdriver.Chrome(
+            executable_path=r"C:\Users\knaben\AppData\Local\chromedriver.exe",
+            options=options,
+            )
+        if not url:
+            url: str = "https://cms.obos.no/EPiServer/Cms/#context=epi.cms.contentdata:///5&viewsetting=viewlanguage:///no" 
+        driver.get(url)
 
     def open_additem():
         """

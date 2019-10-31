@@ -6,6 +6,7 @@ class Bot:
     def __init__(self):
         self.id = id+1
         id += 1
+        
 
 
 def load_driver(self, url:str = None, headless: bool = False):

@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 class Bot:
@@ -39,17 +40,54 @@ class Bot:
         Navigates the menu and opens the add item page
         
         """
-
-        meny=self.driver.find_element_by_class_name("epi-iconTree")
+        self.driver.implicitly_wait(2)
+        header=WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "body div nav header")))
+        try:
+            header.find_element_by_xpath("//span[contains(text(),'Edit')]").click()
+        except Exception:
+            try:
+                header.find_element_by_xpath("//span[contains(text(),'Edit)]").click()
+            except:
+                pass
+        meny = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "#uniqName_116_0 > div > div.epi-toolbarLeading.epi-toolbarGroup > span:nth-child(1) > span.dijit.dijitReset.dijitInline.epi-leadingToggleButton.epi-mediumButton.dijitToggleButton")))
+        try:
+            meny: self.driver.find_elements_by_css_selector("#uniqName_116_0 > div > div.epi-toolbarLeading.epi-toolbarGroup > span:nth-child(1) > span.dijit.dijitReset.dijitInline.epi-leadingToggleButton.epi-mediumButton.dijitToggleButton")
+        except Exception:
+            pass
         meny.click()
-        omdirigeringer = self.driver.find_element_by_id("uniqName_62_0_tablist_uniqName_2_12")
+
+        # extend_meny = WebDriverWait(self.driver, 10).until(
+        #     EC.presence_of_element_located((By.CSS_SELECTOR, "#uniqName_62_0_tablist_menuBtn > img")))
+        # extend_meny.click()
+
+        omdirigeringer = WebDriverWait(self.driver, 30).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "#uniqName_62_0_tablist_uniqName_2_12")))
+        self.driver.execute_script("arguments[0].scrollIntoView();", omdirigeringer)
         omdirigeringer.click()
-        obosfelt = self.driver.find_element_by_css_selector("#dijit_InlineEditBox_31")
-        obosfelt.click()
-        dropdown = self.driver.find_elements_by_css_selector("#uniqName_0_66 > div.dijitTreeRow.dijitTreeRowSelected > span > span.epi-extraIconsContainer > span.epi-extraIcon.dijitTreeIcon.epi-iconContextMenu")
-        dropdown[0].click()
-        additem = self.driver.find_element_by_css_selector("#uniqName_37_40_text")
+
+        obosfelt =  WebDriverWait(self.driver, 30).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "div.epi-hierarchicalList div.dijitLayoutContainer span.dijitTreeContent")))
+        try:
+            obosfelt= self.driver.find_elements_by_css_selector("div.epi-hierarchicalList div.dijitLayoutContainer span.dijitTreeContent")
+            obosfelt[2].click()
+        except Exception:
+            try:
+                obosfelt= self.driver.find_element_by_css_selector("div.epi-hierarchicalList div.dijitLayoutContainer span.dijitTreeContent")
+                obosfelt[2].click()
+            except Exception:
+                pass
+
+        dropdown =  WebDriverWait(self.driver, 30).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR,"div.epi-hierarchicalList div.dijitLayoutContainer span.dijitTreeContent span.epi-extraIcon.epi-iconContextMenu")))
+        dropdown.click() 
+
+        additem =  WebDriverWait(self.driver, 30).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "#uniqName_37_40_text")))
         additem.click()
+
+        
 
     def add_redirect(self, old: str, new: str):
         """adds redirects
@@ -58,5 +96,27 @@ class Bot:
             old {str} -- old url
             new {str} -- new url
         """
-        new_url = self.driver.find_element_by_css_selector("#dijit_form_ValidationTextBox_3")
-        
+        self.driver.implicitly_wait(3)
+        WebDriverWait(self.driver, 30).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "div.dijitStackContainer.dijitContainer.dijitLayoutContainer"))
+        )
+        action = ActionChains(self.driver)
+        action.send_keys(old)
+        action.send_keys(Keys.TAB)
+        action.send_keys(Keys.ARROW_DOWN)
+        action.send_keys(Keys.ARROW_DOWN)
+        action.send_keys(Keys.ARROW_DOWN)
+        action.send_keys(Keys.ENTER)
+        action.send_keys(Keys.TAB)
+        action.send_keys(Keys.TAB)
+        action.send_keys(new)
+        action.perform()
+        self.driver.implicitly_wait(1)
+        self.driver.find_element_by_xpath("//*[contains(text(), 'Create')]").click()
+        # old_url = self.driver.find_element_by_id("dijit_form_ValidationTextBox_6")
+        # old_url.send_keys(old)
+        # self.driver.find_element_by_css_selector("#uniqName_81_0").click()
+        # self.driver.find_element_by_css_selector("#dijit_MenuItem_11_text").click()
+        # new_url = self.driver.find_element_by_id("dijit_form_ValidationTextBox_7")
+        # new_url.send_keys(new)
+

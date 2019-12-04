@@ -10,7 +10,7 @@ for urls in redirs[1:]:
     urls[1]=f"https://nye.obos.no{urls[1]}"
 
 
-with open("redir2.csv","w") as f:
-    write = csv.writer(f,delimiter="|")
-    for line in redirs:
+with open("master.csv", "w", newline='') as f:
+    write = csv.writer(f, delimiter="|")
+    for line in links:
         write.writerow(line)
